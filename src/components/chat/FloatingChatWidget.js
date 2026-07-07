@@ -7,6 +7,7 @@ import { IoArrowUp } from "react-icons/io5";
 import useDisclosure from "@/hooks/useDisclosure";
 import { sendChatMessage } from "@/services/chatService";
 import { siteConfig } from "@/config/site";
+import "./chat-widget.css";
 
 const WELCOME_MESSAGE = "Hello! How can I help you today?";
 const MIN_SEND_DELAY_MS = 700;

@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import Drawer from "@/components/ui/Drawer";
 import { coreServices } from "@/config/services";
-
-const CLOSE_DELAY_MS = 400;
 
 const ICONS = {
   web: (
@@ -51,95 +49,29 @@ const ICONS = {
   ),
 };
 
-function isInsideDrawer(node) {
-  if (!(node instanceof Element)) return false;
-  return Boolean(node.closest('[data-component="drawer"]'));
-}
-
-function isInsideTrigger(node) {
-  if (!(node instanceof Element)) return false;
-  return Boolean(node.closest('[data-component="nav-services-trigger"]'));
-}
-
 export default function ServicesMegaMenu({ label = "Services", viewAllHref = "/services" }) {
   const pathname = usePathname();
   const [prevPathname, setPrevPathname] = useState(pathname);
   const [isOpen, setIsOpen] = useState(false);
-  const [isPinned, setIsPinned] = useState(false);
-  const closeTimerRef = useRef(null);
 
   if (pathname !== prevPathname) {
     setPrevPathname(pathname);
     if (isOpen) setIsOpen(false);
-    if (isPinned) setIsPinned(false);
   }
 
   const isActive =
     pathname === "/services" ||
     pathname.startsWith("/services/");
 
-  const clearCloseTimer = useCallback(() => {
-    if (closeTimerRef.current) {
-      window.clearTimeout(closeTimerRef.current);
-      closeTimerRef.current = null;
-    }
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
   }, []);
 
-  const handleClose = useCallback(() => {
-    clearCloseTimer();
-    setIsPinned(false);
-    setIsOpen(false);
-  }, [clearCloseTimer]);
-
-  const handleOpen = useCallback(() => {
-    clearCloseTimer();
-    setIsOpen(true);
-  }, [clearCloseTimer]);
-
-  const scheduleClose = useCallback(() => {
-    if (isPinned) return;
-    clearCloseTimer();
-    closeTimerRef.current = window.setTimeout(() => {
-      setIsOpen(false);
-    }, CLOSE_DELAY_MS);
-  }, [clearCloseTimer, isPinned]);
-
-  const handleTriggerMouseLeave = useCallback(
-    (event) => {
-      if (isPinned) return;
-      if (isInsideDrawer(event.relatedTarget)) return;
-      scheduleClose();
-    },
-    [isPinned, scheduleClose],
-  );
-
-  const handlePanelMouseLeave = useCallback(
-    (event) => {
-      if (isPinned) return;
-      if (isInsideTrigger(event.relatedTarget)) return;
-      scheduleClose();
-    },
-    [isPinned, scheduleClose],
-  );
-
-  const handleTriggerClick = useCallback(
-    (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      clearCloseTimer();
-
-      if (isOpen && isPinned) {
-        handleClose();
-        return;
-      }
-
-      setIsPinned(true);
-      setIsOpen(true);
-    },
-    [clearCloseTimer, handleClose, isOpen, isPinned],
-  );
-
-  useEffect(() => () => clearCloseTimer(), [clearCloseTimer]);
+  const handleTriggerClick = useCallback((event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setIsOpen((open) => !open);
+  }, []);
 
   const handleCardMouseMove = useCallback((event) => {
     const card = event.currentTarget;
@@ -211,8 +143,6 @@ export default function ServicesMegaMenu({ label = "Services", viewAllHref = "/s
       <li
         data-component="nav-services-trigger"
         data-open={isOpen ? "true" : "false"}
-        onMouseEnter={handleOpen}
-        onMouseLeave={handleTriggerMouseLeave}
       >
         <button
           type="button"
@@ -241,10 +171,8 @@ export default function ServicesMegaMenu({ label = "Services", viewAllHref = "/s
         badge="Services"
         title="What we build for you"
         description="Pick a service to explore how we can help your business grow."
-        showOverlay={isPinned}
-        lockScroll={isPinned}
-        onPanelMouseEnter={handleOpen}
-        onPanelMouseLeave={handlePanelMouseLeave}
+        showOverlay
+        lockScroll
         footer={drawerFooter}
       >
         {drawerContent}
