@@ -1,0 +1,103 @@
+/* ==========================================================================
+   Card hover fixes — remove white shine / inset glow site-wide
+   ========================================================================== */
+
+/* Hero results card — no white shine, accent shadow only */
+[data-shell="marketing"] .hrc-card:hover,
+[data-shell="marketing"] .hero-card.hrc-card:hover {
+  box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.55) !important;
+}
+
+[data-shell="marketing"] .hrc-card .hrc-tab {
+  color: var(--hrc-muted);
+}
+
+[data-shell="marketing"] .hrc-card .hrc-tab[data-active="true"] {
+  color: var(--hrc-text);
+}
+
+[data-shell="marketing"] .hrc-card .hrc-nav-btn {
+  color: var(--hrc-muted);
+}
+
+/* White sweep/shine overlays on cards and links */
+[data-shell="marketing"] [class*="-shine"],
+[data-shell="marketing"] .trusted-company-shine {
+  display: none !important;
+}
+
+/* White sheen sweep on card icon badges */
+[data-shell="marketing"] [class*="-card"] [class*="-icon"]::after,
+[data-shell="marketing"] [class*="-card-icon"]::after,
+[data-shell="marketing"] [class*="card-icon"]::after {
+  display: none !important;
+}
+
+/* Card links — no white inset on hover */
+[data-shell="marketing"] a[class*="card"]:hover,
+[data-shell="marketing"] a[class*="card"]:focus-visible {
+  box-shadow: none;
+}
+
+/* Generic card hover — accent shadow only, no white inset */
+[data-shell="marketing"] [class*="-card"]:hover {
+  --card-hover-shadow: 0 16px 40px -20px var(--accent-glow);
+}
+
+[data-shell="marketing"] .problem-card:hover .problem-card-icon,
+[data-shell="marketing"] .solution-card:hover .solution-card-icon,
+[data-shell="marketing"] .tech-card:hover .tech-card-icon,
+[data-shell="marketing"] .proven-card:hover .proven-card-icon,
+[data-shell="marketing"] .service-feature-card:hover .service-feature-icon,
+[data-shell="marketing"] .service-feature-card--consultancy:hover .service-feature-icon {
+  box-shadow: 0 10px 24px -8px var(--accent-glow) !important;
+}
+
+[data-shell="marketing"] [data-slot="trusted-company-card"]:hover {
+  box-shadow: 0 20px 40px -16px var(--accent-glow) !important;
+  background: var(--surface) !important;
+}
+
+[data-shell="marketing"] .pricing-rate-card:hover,
+[data-shell="marketing"] .pricing-fixed-card:hover,
+[data-shell="marketing"] .pricing-note-card:hover,
+[data-shell="marketing"] .pricing-benefit-card:hover {
+  box-shadow: var(--shadow-md) !important;
+}
+
+[data-shell="marketing"] .about-expertise-card:hover .about-card-icon,
+[data-shell="marketing"] .about-expertise-card:hover {
+  box-shadow: 0 12px 28px -12px var(--accent-glow) !important;
+}
+
+[data-shell="marketing"] .contact-info-card:hover,
+[data-shell="marketing"] .contact-sidebar .contact-info-card:hover {
+  box-shadow: var(--shadow-md) !important;
+}
+
+[data-shell="marketing"] .nav-mega-card:hover {
+  box-shadow: 0 14px 32px -12px var(--accent-glow) !important;
+}
+
+[data-shell="marketing"] .outcome-card:hover,
+[data-shell="marketing"] .tm-card:hover,
+[data-shell="marketing"] .process-card:hover,
+[data-shell="marketing"] .cs-card:hover {
+  box-shadow: 0 24px 48px -20px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-shell="marketing"] .tech-card:hover,
+[data-shell="marketing"] .problem-card:hover,
+[data-shell="marketing"] .solution-card:hover,
+[data-shell="marketing"] .proven-card:hover {
+  box-shadow: 0 24px 48px -24px var(--accent-glow) !important;
+}
+
+[data-shell="marketing"] .tech-card:hover .tech-card-inner::after,
+[data-shell="marketing"] .problem-card:hover .problem-card-inner::after,
+[data-shell="marketing"] .solution-card:hover .solution-card-inner::after,
+[data-shell="marketing"] .proven-card:hover .proven-card-inner::before,
+[data-shell="marketing"] .outcome-card:hover .outcome-card-inner::after,
+[data-shell="marketing"] .cs-card:hover .cs-card-inner::after {
+  opacity: 0 !important;
+}
