@@ -389,3 +389,30 @@ export const servicePricingSummary = [
 export function getServiceBySlug(slug) {
   return coreServices.find((service) => service.slug === slug) ?? null;
 }
+
+/** Slugs shown on the contact form assessment dropdown. */
+const CONTACT_SERVICE_SLUGS = ["web-development", "java-backend", "wordpress"];
+
+/** Contact form dropdown — limited to primary service offerings. */
+export const contactServiceOptions = [
+  { value: "", label: "Select a service" },
+  ...coreServices
+    .filter((service) => CONTACT_SERVICE_SLUGS.includes(service.slug))
+    .map((service) => ({
+      value: service.slug,
+      label: service.title,
+    })),
+  { value: "other", label: "Not sure — help me decide" },
+];
+
+const CONTACT_SERVICE_LABELS = Object.fromEntries(
+  contactServiceOptions
+    .filter((option) => option.value)
+    .map((option) => [option.value, option.label]),
+);
+
+/** @param {string} slug */
+export function getContactServiceLabel(slug) {
+  if (slug === "other") return "Not sure — help me decide";
+  return CONTACT_SERVICE_LABELS[slug] ?? null;
+}

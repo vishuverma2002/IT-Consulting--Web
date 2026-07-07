@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Container from "@/components/layout/Container";
 import Button from "@/components/ui/Button";
 import { siteConfig } from "@/config/site";
+import { contactServiceOptions } from "@/config/services";
 import {
   EASE,
   fadeUp,
@@ -14,19 +15,12 @@ import {
 } from "@/lib/motion";
 import { useReveal } from "@/hooks/useReveal";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
+import { sendContactForm } from "@/services/contactService";
 
 const TRUST_POINTS = [
   "Free 30-minute discovery call",
   "Honest pricing before any work starts",
   "Reply within one business hour",
-];
-
-const SERVICE_OPTIONS = [
-  { value: "", label: "Select a service" },
-  { value: "web-development", label: "Website or Web App" },
-  { value: "java-backend", label: "Backend & Business Systems" },
-  { value: "wordpress", label: "WordPress Website" },
-  { value: "other", label: "Not sure — help me decide" },
 ];
 
 function ContactHero() {
@@ -189,14 +183,37 @@ function FormField({ label, htmlFor, children, index, reducedMotion, fullWidth =
 
 function ContactForm({ reducedMotion }) {
   const [focused, setFocused] = useState(null);
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState("idle");
+  const [error, setError] = useState("");
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    setSubmitted(true);
+    if (status === "sending") return;
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const payload = {
+      name: String(formData.get("name") ?? "").trim(),
+      email: String(formData.get("email") ?? "").trim(),
+      phone: String(formData.get("phone") ?? "").trim(),
+      problem: String(formData.get("problem") ?? "").trim(),
+      message: String(formData.get("message") ?? "").trim(),
+    };
+
+    setStatus("sending");
+    setError("");
+
+    try {
+      await sendContactForm(payload);
+      setStatus("success");
+      form.reset();
+    } catch (err) {
+      setStatus("error");
+      setError(err.message || "Unable to send your request. Please try again.");
+    }
   }
 
-  if (submitted) {
+  if (status === "success") {
     return (
       <motion.div
         className="contact-success"
@@ -211,7 +228,14 @@ function ContactForm({ reducedMotion }) {
           We&apos;ll review your details and get back to you within one business hour on
           business days with a clear plan and honest next steps.
         </p>
-        <Button type="button" variant="secondary" onClick={() => setSubmitted(false)}>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => {
+            setStatus("idle");
+            setError("");
+          }}
+        >
           Send another message
         </Button>
       </motion.div>
@@ -236,52 +260,58 @@ function ContactForm({ reducedMotion }) {
     >
       <div className="contact-form-card-glow" aria-hidden="true" />
 
+      <header className="contact-form-head">
+        <h2 className="contact-form-title">Send a message.</h2>
+      </header>
+
       <div className="contact-form-grid">
-        <FormField label="Full name" htmlFor="contact-name" index={0} reducedMotion={reducedMotion}>
+        <FormField label="Full Name" htmlFor="contact-name" index={0} reducedMotion={reducedMotion}>
           <input
             id="contact-name"
             type="text"
             name="name"
-            placeholder="Jane Smith"
             required
             autoComplete="name"
             {...fieldProps("name")}
           />
         </FormField>
 
-        <FormField label="Work email" htmlFor="contact-email" index={1} reducedMotion={reducedMotion}>
+        <FormField label="Email Address" htmlFor="contact-email" index={1} reducedMotion={reducedMotion}>
           <input
             id="contact-email"
             type="email"
             name="email"
-            placeholder="jane@company.com"
             required
             autoComplete="email"
             {...fieldProps("email")}
           />
         </FormField>
 
-        <FormField label="Company" htmlFor="contact-company" index={2} reducedMotion={reducedMotion}>
+        <FormField label="Phone Number" htmlFor="contact-phone" index={2} reducedMotion={reducedMotion}>
           <input
-            id="contact-company"
-            type="text"
-            name="company"
-            placeholder="Acme Corp"
+            id="contact-phone"
+            type="tel"
+            name="phone"
             required
-            autoComplete="organization"
-            {...fieldProps("company")}
+            autoComplete="tel"
+            {...fieldProps("phone")}
           />
         </FormField>
 
-        <FormField label="Service needed" htmlFor="contact-service" index={3} reducedMotion={reducedMotion}>
+        <FormField
+          label="What problem are you facing?"
+          htmlFor="contact-problem"
+          index={3}
+          reducedMotion={reducedMotion}
+        >
           <select
-            id="contact-service"
-            name="service"
+            id="contact-problem"
+            name="problem"
             defaultValue=""
             required
-            {...fieldProps("service")}
+            {...fieldProps("problem")}
           >
-            {SERVICE_OPTIONS.map((opt) => (
+            {contactServiceOptions.map((opt) => (
               <option key={opt.value || "placeholder"} value={opt.value} disabled={!opt.value}>
                 {opt.label}
               </option>
@@ -290,7 +320,7 @@ function ContactForm({ reducedMotion }) {
         </FormField>
 
         <FormField
-          label="What are you looking to build?"
+          label="Project Details"
           htmlFor="contact-message"
           index={4}
           reducedMotion={reducedMotion}
@@ -299,7 +329,6 @@ function ContactForm({ reducedMotion }) {
           <textarea
             id="contact-message"
             name="message"
-            placeholder="Share your goals, timeline, and any challenges in your own words — we'll translate that into a solid technical plan."
             required
             {...fieldProps("message")}
           />
@@ -314,10 +343,21 @@ function ContactForm({ reducedMotion }) {
         viewport={{ once: true }}
         transition={{ duration: 0.45, delay: 0.35, ease: EASE }}
       >
-        <Button type="submit" variant="primary" className="contact-submit-btn">
-          Book Free Assessment
+        <Button
+          type="submit"
+          variant="primary"
+          className="contact-submit-btn"
+          disabled={status === "sending"}
+          aria-busy={status === "sending"}
+        >
+          {status === "sending" ? "Sending..." : "Book Free Assessment"}
           <span className="contact-submit-arrow" aria-hidden="true">→</span>
         </Button>
+        {status === "error" && error ? (
+          <p className="contact-form-error" role="alert">
+            {error}
+          </p>
+        ) : null}
         <p className="contact-form-note">
           Confidential. Typical reply within one business hour on business days.
         </p>
