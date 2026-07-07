@@ -29,10 +29,10 @@ export default function GuideCard({
       onClick={() => onSelect(item)}
       className={[
         "group flex h-[58px] w-full cursor-pointer items-center gap-3 rounded-[14px] border bg-white px-3 text-left outline-none transition-[border-color,box-shadow,transform] duration-200",
-        "focus-visible:ring-2 focus-visible:ring-[#5B5FF8]/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F8FC]",
+        "focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F8FC]",
         isSelected
-          ? "border-[#5B5FF8]/40 shadow-[0_4px_16px_-6px_rgba(91,95,248,0.18)]"
-          : "border-[#E6EAF2] shadow-[0_1px_2px_rgba(15,23,42,0.04)] hover:-translate-y-0.5 hover:border-[#5B5FF8]/50 hover:shadow-[0_8px_24px_-8px_rgba(15,23,42,0.1)]",
+          ? "border-brand/40 shadow-[0_4px_16px_-6px_rgba(0,102,255,0.18)]"
+          : "border-[#E6EAF2] shadow-[0_1px_2px_rgba(15,23,42,0.04)] hover:-translate-y-0.5 hover:border-brand/50 hover:shadow-[0_8px_24px_-8px_rgba(15,23,42,0.1)]",
       ].join(" ")}
       whileTap={{ scale: 0.985 }}
       transition={{ type: "spring", stiffness: 500, damping: 32 }}
@@ -49,7 +49,7 @@ export default function GuideCard({
       </span>
 
       <motion.span
-        className="shrink-0 text-[#CBD5E1] group-hover:text-[#5B5FF8]"
+        className="shrink-0 text-[#CBD5E1] group-hover:text-brand"
         initial={false}
         animate={{ x: isSelected ? 2 : 0 }}
         whileHover={{ x: 4 }}

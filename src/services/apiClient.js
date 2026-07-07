@@ -13,11 +13,22 @@ async function request(path, options = {}) {
     ...options,
   });
 
-  if (!res.ok) {
-    // Normalize errors so callers handle one shape. (No business logic here.)
-    throw new Error(`Request failed: ${res.status}`);
+  let payload = null;
+  try {
+    payload = await res.json();
+  } catch {
+    payload = null;
   }
-  return res.json();
+
+  if (!res.ok) {
+    const message =
+      payload && typeof payload.error === "string"
+        ? payload.error
+        : `Request failed: ${res.status}`;
+    throw new Error(message);
+  }
+
+  return payload;
 }
 
 export const apiClient = {

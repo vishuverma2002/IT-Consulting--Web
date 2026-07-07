@@ -15,8 +15,8 @@ export default function GuideItemIcon({ icon: Icon, isSelected = false }: GuideI
       className={[
         "flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px]",
         isSelected
-          ? "bg-gradient-to-br from-[#5B5FF8] to-[#7C7FFF] text-white shadow-[0_4px_12px_-4px_rgba(91,95,248,0.45)]"
-          : "bg-gradient-to-br from-[#EEF0FF] to-[#E8EAFF] text-[#5B5FF8] group-hover:from-[#5B5FF8] group-hover:to-[#7C7FFF] group-hover:text-white group-hover:shadow-[0_4px_12px_-4px_rgba(91,95,248,0.35)]",
+          ? "bg-gradient-to-br from-[#3b82f6] to-[#0066ff] text-white shadow-[0_4px_12px_-4px_rgba(0,102,255,0.45)]"
+          : "bg-gradient-to-br from-[rgba(0,102,255,0.08)] to-[rgba(0,102,255,0.12)] text-brand group-hover:from-[#3b82f6] group-hover:to-[#0066ff] group-hover:text-white group-hover:shadow-[0_4px_12px_-4px_rgba(0,102,255,0.35)]",
       ].join(" ")}
       animate={{ scale: isSelected ? 1.06 : 1 }}
       whileHover={{ scale: 1.08 }}

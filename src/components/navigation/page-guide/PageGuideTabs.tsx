@@ -31,8 +31,8 @@ export default function PageGuideTabs({ activeTab, onTabChange }: PageGuideTabsP
             onClick={() => onTabChange(tab.id)}
             className={[
               "relative flex shrink-0 flex-col items-center px-3 pb-2 pt-1.5 text-[13px] font-medium leading-none whitespace-nowrap outline-none",
-              "focus-visible:ring-2 focus-visible:ring-[#5B5FF8]/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F8FC]",
-              isActive ? "text-[#5B5FF8]" : "text-[#64748B] hover:text-[#1E293B]",
+              "focus-visible:ring-2 focus-visible:ring-brand/30 focus-visible:ring-offset-2 focus-visible:ring-offset-[#F7F8FC]",
+              isActive ? "text-brand" : "text-[#64748B] hover:text-[#1E293B]",
             ].join(" ")}
             whileHover={{ y: -1 }}
             whileTap={{ scale: 0.96 }}
@@ -66,13 +66,13 @@ export default function PageGuideTabs({ activeTab, onTabChange }: PageGuideTabsP
             {isActive ? (
               <motion.span
                 layoutId="page-guide-tab-underline"
-                className="absolute bottom-0 left-2 right-2 h-[2px] rounded-full bg-[#5B5FF8] shadow-[0_0_8px_rgba(91,95,248,0.45)]"
+                className="absolute bottom-0 left-2 right-2 h-[2px] rounded-full bg-brand shadow-[0_0_8px_rgba(0,102,255,0.45)]"
                 transition={{ type: "spring", stiffness: 420, damping: 32 }}
               />
             ) : (
               <motion.span
-                className="absolute bottom-0 left-2 right-2 h-[2px] rounded-full bg-[#5B5FF8]/0"
-                whileHover={{ backgroundColor: "rgba(91, 95, 248, 0.2)" }}
+                className="absolute bottom-0 left-2 right-2 h-[2px] rounded-full bg-brand/0"
+                whileHover={{ backgroundColor: "rgba(0, 102, 255, 0.2)" }}
                 transition={{ duration: 0.2 }}
               />
             )}

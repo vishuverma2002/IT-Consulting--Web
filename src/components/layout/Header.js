@@ -1,4 +1,5 @@
 import Link from "next/link";
+import BrandLink from "@/components/layout/BrandLink";
 import Container from "@/components/layout/Container";
 import NavMenu from "@/components/navigation/NavMenu";
 import PageGuideWidget from "@/components/navigation/PageGuideWidget";
@@ -19,10 +20,10 @@ export default function Header() {
     <header data-component="site-header">
       <Container as="div">
         {/* Brand / logo zone */}
-        <Link href="/" data-slot="brand" className="brand-link">
+        <BrandLink data-slot="brand" className="brand-link">
           <span className="brand-link-mark" aria-hidden="true" />
           <span className="brand-link-text">{siteConfig.name}</span>
-        </Link>
+        </BrandLink>
 
         <nav aria-label="Primary navigation">
           <NavMenu items={marketingNav} />

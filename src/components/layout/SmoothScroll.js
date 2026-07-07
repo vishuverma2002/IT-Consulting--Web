@@ -1,23 +1,26 @@
 "use client";
 
 import { useEffect } from "react";
-import { usePathname } from "next/navigation";
 import { ReactLenis, useLenis } from "lenis/react";
 import usePrefersReducedMotion from "@/hooks/usePrefersReducedMotion";
 import { SCROLL_HEADER_OFFSET } from "@/hooks/useScrollTo";
+import { SCROLL_TO_TOP_EVENT } from "@/lib/scrollToTop";
 
-function ScrollToTopOnNavigate() {
-  const pathname = usePathname();
+/** Keeps Lenis in sync when the global scroll-to-top utility runs. */
+function LenisScrollSync() {
   const lenis = useLenis();
 
   useEffect(() => {
-    if (lenis) {
-      lenis.scrollTo(0, { immediate: true });
-      return;
+    if (!lenis) return;
+
+    function handleScrollToTop(event) {
+      const smooth = event.detail?.smooth ?? false;
+      lenis.scrollTo(0, { immediate: !smooth });
     }
 
-    window.scrollTo(0, 0);
-  }, [pathname, lenis]);
+    window.addEventListener(SCROLL_TO_TOP_EVENT, handleScrollToTop);
+    return () => window.removeEventListener(SCROLL_TO_TOP_EVENT, handleScrollToTop);
+  }, [lenis]);
 
   return null;
 }
@@ -47,7 +50,7 @@ export default function SmoothScroll({ children }) {
         },
       }}
     >
-      <ScrollToTopOnNavigate />
+      <LenisScrollSync />
       {children}
     </ReactLenis>
   );

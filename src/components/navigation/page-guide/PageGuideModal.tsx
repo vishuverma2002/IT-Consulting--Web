@@ -93,7 +93,7 @@ export default function PageGuideModal({ isOpen, onClose }: PageGuideModalProps)
   const reducedMotion = usePrefersReducedMotion();
   const isClient = useIsClient();
 
-  const [activeTab, setActiveTab] = useState<GuideTabId>("shortcuts");
+  const [activeTab, setActiveTab] = useState<GuideTabId>("pages");
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const items = useMemo(() => getItemsForTab(activeTab), [activeTab]);
@@ -101,7 +101,7 @@ export default function PageGuideModal({ isOpen, onClose }: PageGuideModalProps)
     items.length === 0 ? 0 : Math.min(selectedIndex, items.length - 1);
 
   const handleClose = useCallback(() => {
-    setActiveTab("shortcuts");
+    setActiveTab("pages");
     setSelectedIndex(0);
     onClose();
   }, [onClose]);
@@ -228,7 +228,7 @@ export default function PageGuideModal({ isOpen, onClose }: PageGuideModalProps)
           <motion.button
             type="button"
             aria-label="Close page guide"
-            className="absolute inset-0 bg-[#0F172A]/50 backdrop-blur-md"
+            className="absolute inset-0 bg-black/60"
             onClick={handleClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -253,7 +253,7 @@ export default function PageGuideModal({ isOpen, onClose }: PageGuideModalProps)
                 <div className="min-w-0">
                   <motion.h2
                     id={titleId}
-                    className="!m-0 !text-[20px] font-bold leading-none tracking-tight text-[#1E293B]"
+                    className="!m-0 !text-[20px] !font-bold leading-none tracking-tight !text-[var(--accent)]"
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
@@ -274,7 +274,7 @@ export default function PageGuideModal({ isOpen, onClose }: PageGuideModalProps)
                   type="button"
                   onClick={handleClose}
                   aria-label="Close page guide"
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#64748B] transition-colors duration-200 hover:bg-[#EBEDF3] hover:text-[#1E293B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5B5FF8]/30"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-[#64748B] transition-colors duration-200 hover:bg-[#EBEDF3] hover:text-[#1E293B] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/30"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.22, delay: 0.06 }}

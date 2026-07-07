@@ -34,8 +34,8 @@ export const PAGE_GUIDE_TABS: {
   emoji: string;
   icon: LucideIcon;
 }[] = [
-  { id: "shortcuts", label: "Shortcuts", emoji: "⚡", icon: Zap },
   { id: "pages", label: "All Pages", emoji: "📄", icon: LayoutGrid },
+  { id: "shortcuts", label: "Shortcuts", emoji: "⚡", icon: Zap },
   { id: "legal", label: "Legal", emoji: "⚖", icon: Scale },
 ];
 
